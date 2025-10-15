@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" 
-	th:replace="~{/common/layout :: layout(~{::title},~{::body/content()})}">
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{/common/layout :: layout(~{::title},~{::body/content()})}">
+
 <head>
-<meta charset="UTF-8">
-<title>勤怠情報変更｜LMS</title>
+	<meta charset="UTF-8">
+	<title>勤怠情報変更｜LMS</title>
 </head>
+
 <body>
 
 	<!-- 完了メッセージ -->
@@ -43,45 +44,54 @@
 
 	<div class="row">
 		<div class="bs-component col-sm-12">
-			<table class="table table-hover dataTable no-footer">
-				<thead class="db">
-					<tr>
-						<th class="w160">日付</th>
-						<th class="w260">コース内容</th>
-						<th class="w80">出勤</th>
-						<th class="w80">退勤</th>
-						<th class="w120">中抜け時間</th>
-						<th class="w120">ステータス</th>
-						<th class="w200">備考</th>
-					</tr>
-				</thead>
+			<div class="scroll-10days scroll-x">
+				<div class="scroll-10days scroll-x" style="max-height:480px;
+            overflow-y:auto;
+            overflow-x:auto;
+            border:1px solid #ddd;
+            border-radius:6px;">
+					<table class="table table-hover dataTable no-footer">
+						<thead class="db" style="position:sticky; top:0; background:#fff; z-index:1;">
+							<tr>
+								<th class="w160">日付</th>
+								<th class="w260">コース内容</th>
+								<th class="w80">出勤</th>
+								<th class="w80">退勤</th>
+								<th class="w120">中抜け時間</th>
+								<th class="w120">ステータス</th>
+								<th class="w200">備考</th>
+							</tr>
+						</thead>
+						<tbody class="db">
+							<th:block th:each="attendanceManagementDto : ${attendanceManagementDtoList}"
+								th:object="${attendanceManagementDto}">
+								<tr>
+									<td class="w160">[[*{#dates.format(trainingDate, 'yyyy年M月d日(E)')}]]</td>
+									<td class="w260">[[*{sectionName}]]</td>
+									<td class="w80">[[*{trainingStartTime}]]</td>
+									<td class="w80">[[*{trainingEndTime}]]</td>
+									<td class="w120">[[*{blankTimeValue}]]</td>
+									<td class="w120">[[*{statusDispName}]]</td>
+									<td class="w200">[[*{note}]]</td>
+								</tr>
+							</th:block>
+						</tbody>
+					</table>
+				</div>
 
-				<tbody class="db">
-					<th:block th:each="attendanceManagementDto : ${attendanceManagementDtoList}" th:object="${attendanceManagementDto}">
-						<tr>
-							<td class="w160">[[*{#dates.format(trainingDate, 'yyyy年M月d日(E)')}]]</td>
-							<td class="w260">[[*{sectionName}]]</td>
-							<td class="w80">[[*{trainingStartTime}]]</td>
-							<td class="w80">[[*{trainingEndTime}]]</td>
-							<td class="w120">[[*{blankTimeValue}]]</td>
-							<td class="w120">[[*{statusDispName}]]</td>
-							<td class="w200">[[*{note}]]</td>
-						</tr>
-					</th:block>
-				</tbody>
-			</table>
+			</div>
 		</div>
 	</div>
 
 	<script type="text/javascript" th:inline="javascript">
-		$(function() {
+		$(function () {
 			$("#now").text('現在の時刻は　' + getClock() + '　です。');
-			setInterval(function() {
+			setInterval(function () {
 				$("#now").text('現在の時刻は　' + getClock() + '　です。');
 			}, 1000);
 		});
 		function getClock() {
-			const today =  new Date();
+			const today = new Date();
 			const hours = ('0' + today.getHours()).slice(-2);
 			const minutes = ('0' + today.getMinutes()).slice(-2);
 			return hours + ':' + minutes;
@@ -89,4 +99,5 @@
 	</script>
 
 </body>
+
 </html>
